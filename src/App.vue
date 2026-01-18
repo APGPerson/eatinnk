@@ -1,6 +1,6 @@
 <script setup>
 import {provide, shallowRef} from "vue";
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import Title from './components/Title.vue'
 import dayjs from "dayjs";
 import Swal from 'sweetalert2';
@@ -132,7 +132,7 @@ function advance(){
             background: "var(--color-background)",
             color: "var(--color-text)",
             confirmButtonText: "确认",
-          }).then(r => {
+          }).then(() => {
             Swal.fire({
               icon: "info",
               title: "Use open-source code",
@@ -163,7 +163,7 @@ function advance(){
                   background: "var(--color-background)",
                   color: "var(--color-text)",
                   confirmButtonText: "确认"
-                }).then(r => {
+                }).then(() => {
                   location.reload()
                 })
               }catch(err){

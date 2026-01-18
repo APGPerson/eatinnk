@@ -28,17 +28,17 @@ npm run build
 {
   "days": [
     "2025-1-1", // Use ISO8601
-    ...
+    "..."
   ],
   "detail":{
     "north": [
       [ // one days menu
         [], // Window menu
-        ...
+        "..."
       ],
-      ...
+      "..."
     ],
-    "south": [...]
+    "south": ["..."]
   }
 }
 ```
