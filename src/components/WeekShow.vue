@@ -7,16 +7,22 @@ import IconThursday from './icons/IconThursday.vue'
 import IconFriday from './icons/IconFriday.vue'
 import LoadingShow from './LoadingShow.vue';
 import ErrorShow from './ErrorShow.vue';
+import DetailWindowNorth from './DetailWindowNorth.vue'
+import DetailWindowSouth from './DetailWindowSouth.vue'
+import {getData,defaultMenuData} from "@/assets/utils.js";
 import {inject, ref, shallowRef, watch} from "vue";
 import dayjs from "dayjs";
 let BaseVFor = []
 
+const nowchoose = ref(null)
+const detailmenu = ref(null)
 const timenow = dayjs()
 const statue = inject('statue')
 let data = inject('data')
 let ChangedVFor = shallowRef([])
 let menu = null
 let date = null
+
 
 const {now} = defineProps({
   "now": {
@@ -25,100 +31,108 @@ const {now} = defineProps({
   }
 })
 
-let select = null //当前选择的项目
+const selected = ref(null) //当前选择的项目
+
+
+
 const clickDayShow = (index) => {
-  if (select === null) {
-    ChangedVFor.value = [BaseVFor[index]]
-    select = {...ChangedVFor.value[0].dayshow.vbind}
-    console.log(select)
+  if (selected.value === null) {
+    nowchoose.value = index
+    ChangedVFor.value = [getData(BaseVFor,index,{})]
+    selected.value = {...getData(getData(getData(ChangedVFor.value,0,{}),"dayshow",{}),"vbind",{})}
+    console.log(selected.value)
     ChangedVFor.value[0].dayshow.vbind["showline"] = false
     ChangedVFor.value[0].dayshow.vbind["top"] = false
     ChangedVFor.value[0].dayshow.vbind["bottom"] = false
     ChangedVFor.value[0].dayshow.vbind["all"] = true
   } else {
-    ChangedVFor.value[0].dayshow.vbind = select
-    select = null
+    nowchoose.value = null
+    ChangedVFor.value[0].dayshow.vbind = selected.value
+    selected.value = null
     console.log("Back")
     ChangedVFor.value = [...BaseVFor]
   }
 
 }
 
+
 watch(statue, (newState) => {
   if (newState === 1) {
     console.log("Start Show")
-    menu = data.value[now]
+    console.log(data.value)
 
-    date = data.value.days.map((TimeStr) => {
+    menu = getData(data.value,now,defaultMenuData)
+    detailmenu.value = getData(getData(data.value,"detail",{}),now,[])
+    date = getData(data.value,"days",[]).map((TimeStr) => {
       const time = dayjs(TimeStr)
       if (time.isBefore(timenow, "date")) return -1
       else if (time.isAfter(timenow, "date")) return 1
+      else if (TimeStr === "") return -1
       else return 0
     })
-
-    console.log(date)
-
-
+    console.log(detailmenu.value)
+    console.log("-----------------------")
+    console.log(menu)
     BaseVFor = [
       {
         dayshow: {
-          vbind: {'top': true, 'date': date[0]}, von: {
+          vbind: {'top': true, 'date': getData(date,0,-1)}, von: {
             "click": () => {
               clickDayShow(0)
             }
           }
         },
         dayshow_inner: IconMonday,
-        heading: `周一 ${data.value.days[0]}`,
-        menu: menu["mon"],
+        heading: `周一 ${getData(getData(data.value,"days",[]),0,"无时间数据",true)}`,
+        menu: getData(menu,"mon",["无"],true),
         index: 0
       }, {
         dayshow: {
-          vbind: {'date': date[1]}, von: {
+          vbind: {'date': getData(date,1,-1)}, von: {
             "click": () => {
               clickDayShow(1)
             }
           }
         },
         dayshow_inner: IconTuesday,
-        heading: `周二 ${data.value.days[1]}`,
-        menu: menu["tue"],
+        heading: `周二 ${getData(getData(data.value,"days",[]),1,"无时间数据",true)}`,
+        menu: getData(menu,"tue",["无"],true),
         index: 1
       }, {
         dayshow: {
-          vbind: {'date': date[2]}, von: {
+          vbind: {'date': getData(date,2,-1)}, von: {
             "click": () => {
               clickDayShow(2)
             }
           }
         },
         dayshow_inner: IconWednesday,
-        heading: `周三 ${data.value.days[2]}`,
-        menu: menu["wed"],
+        heading: `周三 ${getData(getData(data.value,"days",[]),2,"无时间数据",true)}`,
+        menu: getData(menu,"wed",["无"],true),
         index: 2
       }, {
         dayshow: {
-          vbind: {'date': date[3]}, von: {
+          vbind: {'date': getData(date,3,-1)}, von: {
             "click": () => {
               clickDayShow(3)
             }
           }
         },
         dayshow_inner: IconThursday,
-        heading: `周四 ${data.value.days[3]}`,
-        menu: menu["thu"],
+        heading: `周四 ${getData(getData(data.value,"days",[]),3,"无时间数据",true)}`,
+        menu: getData(menu,"thu",["无"],true),
         index: 3
       }, {
         dayshow: {
-          vbind: {'bottom': true, 'date': date[4]}, von: {
+          vbind: {'bottom': true, 'date': getData(date,4,-1)}, von: {
             "click": () => {
               clickDayShow(4)
             }
           }
         },
         dayshow_inner: IconFriday,
-        heading: `周五 ${data.value.days[4]}`,
-        menu: menu["fri"],
+        heading: `周五 ${getData(getData(data.value,"days",[]),4,"无时间数据",true)}`,
+        menu: getData(menu,"fri",["无"],true),
         index: 4
       }
     ]
@@ -159,6 +173,12 @@ watch(statue, (newState) => {
       </ul>
     </DayShow>
   </TransitionGroup>
+  <Transition name="fadetrans">
+    <DetailWindowNorth v-if="now === 'north' && statue === 1" v-show="selected !== null" :data="detailmenu" :id="nowchoose"></DetailWindowNorth>
+  </Transition>
+  <Transition name="fadetrans">
+    <DetailWindowSouth v-if="now === 'south' && statue === 1" v-show="selected !== null" :data="detailmenu" :id="nowchoose"></DetailWindowSouth>
+  </Transition>
 
   <!--  <DayShow :date="date[1]" @click="clickDayShow(1)">-->
   <!--    <template #icon>-->
