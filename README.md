@@ -4,7 +4,14 @@
 
 ## Follow MIT LICENSE
 
+## Custom your setting [CreateEINKConfig](https://github.com/APGPerson/CreateEINKConfig)
+
+
+---
+
 ## Project Setup
+
+
 
 ```sh
 npm install
@@ -53,3 +60,8 @@ npm run build
 - Spacious74 `(VishalS) Copyright - 2026 Spacious74 (VishalS)`
 - SweetAlert2 `MIT LICENSE`
 - Day.js `MIT LICENSE`
+
+---
+
+# Contact with me:
+# My WeChat ID `APPERSON001`
