@@ -12,7 +12,7 @@ const data = shallowRef({})
 // 1 -> 正常获取信息
 // -1 -> 报错
 //const API = "https://gitee.com/nkapi/eatinnkdata/raw/master/data.json"
-const API = "http://192.168.18.5:3000/data.json"
+const API = "/data.json"
 // provide("statue",statue)
 provide("statue",statue)
 provide("data",data)
