@@ -42,3 +42,14 @@ npm run build
   }
 }
 ```
+
+---
+
+# Thanks
+
+- Vue.js `MIT LICENSE`
+- Vue Router `MIT LICENSE`
+- gharsh11032000 (Harsh Gupta) `Copyright - 2026 gharsh11032000 (Harsh Gupta)`
+- Spacious74 `(VishalS) Copyright - 2026 Spacious74 (VishalS)`
+- SweetAlert2 `MIT LICENSE`
+- Day.js `MIT LICENSE`
